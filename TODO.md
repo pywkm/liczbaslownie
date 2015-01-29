@@ -1,7 +1,8 @@
 TODO:
 -----
 
-- support of floats
-- support of currencies
+- adding tests
+- supporting floats
+- supporting currencies (złote, grosze)
 - API improvement
-- create setup.py and move to pipy
+- creating setup.py and moving to pipy
