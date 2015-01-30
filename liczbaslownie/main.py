@@ -84,11 +84,31 @@ def num_slownie(num):
 
 
 def slownie(num, currency=''):
-    val = num_slownie(num)
-    if not currency:
-        return val
-    curr = _pick_form(num, CURRENCIES[currency][1])
-    return '{} {}'.format(val, curr)
+    if isinstance(num, int):
+        val = num_slownie(num)
+        if not currency:
+            return val
+        curr = _pick_form(num, CURRENCIES[currency][0])
+        return '{} {}'.format(val, curr)
+
+    elif isinstance(num, float):
+        if currency:
+            snum = '{:.2f}'.format(num)
+        else:
+            snum = str(num)
+            dec_places = len(snum.split('.')[1])
+        left, right = snum.split('.')
+        whole = num_slownie(int(left))
+        dec_part = num_slownie(int(right))
+        if not currency:
+            return '{} i {} {}'.format(whole, dec_part, dec_places)
+        curr_whole = _pick_form(int(left), CURRENCIES[currency][0])
+        curr_decp = _pick_form(int(right), CURRENCIES[currency][1])
+        return '{} {} i {} {}'.format(whole, curr_whole, dec_part, curr_decp)
+
+    else:
+        return 'Zły format liczby'
+
 
 
 def main():
