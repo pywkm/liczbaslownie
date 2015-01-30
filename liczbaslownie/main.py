@@ -5,7 +5,7 @@ Docstring
 # Created: 29-01-2015
 # Version: 0.0.2
 
-from slowa import NUMS, POWERS, ENDINGS, ZERO
+from slowa import NUMS, POWERS, ENDINGS, ZERO, CURRENCIES
 
 
 def _append_non_zero(list_, elt):
@@ -26,12 +26,25 @@ def _decompose(num):
     return result
 
 
+def _pick_form(num, forms):
+    if num >= 1000:
+        return forms[2]
+    last1, last2 = num % 10, num % 100
+    if num == 1:
+        idx = 0
+    elif 2 <= last1 <= 4 and not 12 <= last2 <= 14:
+        idx = 1
+    else:
+        idx = 2
+    return forms[idx]
+
+
 def slownie3(num):
     assert 0 <= num < 1000, 'I can only spell numbers between 0 and 999'
     return list(NUMS[idx] for idx in _decompose(num))
 
 
-def slownie(num):
+def num_slownie(num):
     try:
         num = int(num)
     except ValueError:
@@ -56,24 +69,26 @@ def slownie(num):
             # wybór słowa 'tysiące', 'miliony' itp. i odpowiedniej końcówki
             if threes and three != 0:
 
-                last1, last2 = three % 10, three % 100
-
                 if three == 1:
-                    form = 0
                     result.remove(NUMS[1])
-                elif 2 <= last1 <= 4 and not 12 <= last2 <= 14:
-                    form = 1
-                else:
-                    form = 2
 
                 power = POWERS[thousands]
                 ending = 1 if thousands == 1 else 2
-                result.append(power.format(ENDINGS[ending][form]))
+                form = _pick_form(three, ENDINGS[ending])
+                result.append(power.format(form))
 
         except KeyError:
             return 'zbyt wielka liczba'
 
     return ' '.join(result)
+
+
+def slownie(num, currency=''):
+    val = num_slownie(num)
+    if not currency:
+        return val
+    curr = _pick_form(num, CURRENCIES[currency])
+    return '{} {}'.format(val, curr)
 
 
 def main():

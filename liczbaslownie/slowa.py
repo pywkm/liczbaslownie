@@ -27,6 +27,10 @@ ENDINGS = {
     2: ('', 'y', 'ów'),
     }
 
+CURRENCIES = {
+    'zł': ('złoty', 'złote', 'złotych'),
+    'gr': ('grosz', 'grosze', 'groszy'),
+    }
 
 def _compose(start, step, base, endings):
     result = {}
