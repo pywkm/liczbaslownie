@@ -87,7 +87,7 @@ def slownie(num, currency=''):
     val = num_slownie(num)
     if not currency:
         return val
-    curr = _pick_form(num, CURRENCIES[currency])
+    curr = _pick_form(num, CURRENCIES[currency][1])
     return '{} {}'.format(val, curr)
 
 

@@ -28,9 +28,15 @@ ENDINGS = {
     }
 
 CURRENCIES = {
-    'zł': ('złoty', 'złote', 'złotych'),
-    'gr': ('grosz', 'grosze', 'groszy'),
+    'PLN': (('złoty', 'złote', 'złotych'), ('grosz', 'grosze', 'groszy')),
+    'USD': (('dolar', 'dolary', 'dolarów'), ('cent', 'centy', 'centów')),
+    'EUR': (('euro', 'euro', 'euro'), ('eurocent', 'eurocenty', 'eurocentów')),
     }
+
+CURRENCIES['zł'] = CURRENCIES['PLN']
+CURRENCIES['$'] = CURRENCIES['USD']
+CURRENCIES['€'] = CURRENCIES['EUR']
+
 
 def _compose(start, step, base, endings):
     result = {}
