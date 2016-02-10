@@ -1,10 +1,11 @@
 ﻿"""
 Polish representation of numbers (integers, floats, currencies, etc.)
-Słowne przedstawienie liczb (całkowitych, )
+Słowne przedstawienie liczb (całkowitych, zmiennoprzecinkowych, walut)
 """
 # Author:  Wiktor Matuszewski
 # Created: 28-01-2015
-# Version: 0.0.2
+# Last changed: 10-02-2016
+# Version: 0.0.3
 
 
 POWERS = {

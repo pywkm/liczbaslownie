@@ -1,11 +1,12 @@
 ﻿"""
-Docstring
+Entry point
 """
 # Author:  Wiktor Matuszewski
 # Created: 29-01-2015
-# Version: 0.0.2
+# Last changed: 10-02-2016
+# Version: 0.0.3
 
-from slowa import NUMS, POWERS, ENDINGS, ZERO, CURRENCIES
+from .slowa import NUMS, POWERS, ENDINGS, ZERO, CURRENCIES, AFTER_COMA
 
 
 def _append_non_zero(list_, elt):
@@ -26,8 +27,8 @@ def _decompose(num):
     return result
 
 
-def _pick_form(num, forms):
-    if num >= 1000:
+def _pick_form(num, forms, curr=False):
+    if num >= 1000 and not curr:
         return forms[2]
     last1, last2 = num % 10, num % 100
     if num == 1:
@@ -83,12 +84,34 @@ def num_slownie(num):
     return ' '.join(result)
 
 
+def cz_dzies_slownie(snum):
+    max_depth = max(AFTER_COMA.keys())
+    snum = snum[:max_depth]
+    while snum.endswith('0'):
+        snum = snum[:-1]
+    dec_part = num_slownie(int(snum))
+    dec_places = len(snum)
+    dec_places = max_depth if dec_places > max_depth else dec_places
+    if dec_part == 'zero':
+        return ''
+    form = 2
+    if dec_part == 'jeden':
+        dec_part = 'jedna'
+        form = 0
+    elif dec_part.endswith(' dwa'):
+        dec_part = dec_part[:-4] + ' dwie'
+        form = 1
+    elif snum.endswith('3') or snum.endswith('4'):
+        form = 1
+    return dec_part + ' ' + AFTER_COMA[dec_places][form]
+
+
 def slownie(num, currency=''):
     if isinstance(num, int):
         val = num_slownie(num)
         if not currency:
             return val
-        curr = _pick_form(num, CURRENCIES[currency][0])
+        curr = _pick_form(num, CURRENCIES[currency][0], True)
         return '{} {}'.format(val, curr)
 
     elif isinstance(num, float):
@@ -96,23 +119,32 @@ def slownie(num, currency=''):
             snum = '{:.2f}'.format(num)
         else:
             snum = str(num)
-            dec_places = len(snum.split('.')[1])
         left, right = snum.split('.')
         whole = num_slownie(int(left))
-        dec_part = num_slownie(int(right))
         if not currency:
-            return '{} i {} {}'.format(whole, dec_part, dec_places)
-        curr_whole = _pick_form(int(left), CURRENCIES[currency][0])
-        curr_decp = _pick_form(int(right), CURRENCIES[currency][1])
+            dec_part = cz_dzies_slownie(right)
+            if dec_part:
+                return '{} i {}'.format(whole, dec_part)
+            else:
+                return whole
+        dec_part = num_slownie(int(right))
+        curr_whole = _pick_form(int(left), CURRENCIES[currency][0], True)
+        curr_decp = _pick_form(int(right), CURRENCIES[currency][1], True)
         return '{} {} i {} {}'.format(whole, curr_whole, dec_part, curr_decp)
+
+    elif isinstance(num, str):
+        try:
+            num = float(num.replace(',', '.'))
+            return slownie(num, currency)
+        except ValueError:
+            pass
 
     else:
         return 'Zły format liczby'
 
 
-
 def main():
-    print(slownie(100001))
+    print(slownie('12,345'))
 
 
 if __name__ == '__main__':

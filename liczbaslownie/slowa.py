@@ -1,10 +1,11 @@
 ﻿"""
 Polish representation of numbers (integers, floats, currencies, etc.)
-Słowne przedstawienie liczb (całkowitych, )
+Słowne przedstawienie liczb (całkowitych, zmiennoprzecinkowych, walut)
 """
 # Author:  Wiktor Matuszewski
 # Created: 28-01-2015
-# Version: 0.0.2
+# Last changed: 10-02-2016
+# Version: 0.0.3
 
 
 _powers = {1: 'tys{}'}
@@ -78,3 +79,16 @@ for d in (d1_9, d11_19, d10_90, d100_900):
 
 NUMS = dict(_all)
 del _all
+
+
+AFTER_COMA = {
+    1: ('dziesiąta', 'dziesiętne', 'dziesiętnych'),
+    2: ('setna', 'setne' , 'setnych'),
+    3: ('tysięczna', 'tysięczne', 'tysięcznych'),
+    4: ('dziesięcznotysięczna', 'dziesięciotysięczne',
+        'dziesięciotysięcznych'),
+    5: ('stotysięczna', 'stotysięczne', 'stotysięcznych'),
+    6: ('milionowa', 'milionowe', 'milionowych'),
+    7: ('dziesięciomilionowa', 'dziesięciomilionowe',
+        'dziesięciomilionowych'),
+}
